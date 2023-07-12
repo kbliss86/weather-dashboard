@@ -78,7 +78,7 @@ searchButtonEl.addEventListener("click", function() {
         history.push(city+","+state);
         localStorage.setItem("history", JSON.stringify(history));
 
-    var geoCodeAPI = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + state + ",usa&limit=1&appid=" + apiKey;
+    var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + state + ",usa&limit=1&appid=" + apiKey;
         fetch(geoCodeAPI)
         .then(function (response) {
             return response.json();
@@ -88,7 +88,7 @@ searchButtonEl.addEventListener("click", function() {
             const {lat, lon} = data[0];
             console.log(lat);
             console.log(lon);
-            var weatherApi = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + apiKey;
+            var weatherApi = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + apiKey;
             fetch(weatherApi)
             .then(function (response) {
                 return response.json();
@@ -137,7 +137,7 @@ $(".btn-secondary").on("click", function(event) {
     event.preventDefault();
     var city = $(this).text();
     console.log(city);
-    var geoCodeAPI = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + ",usa&limit=1&appid=" + apiKey;
+    var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",usa&limit=1&appid=" + apiKey;
     fetch(geoCodeAPI)
     .then(function (response) {
         return response.json();
@@ -147,7 +147,7 @@ $(".btn-secondary").on("click", function(event) {
         const {lat, lon} = data[0];
         console.log(lat);
         console.log(lon);
-        var weatherApi = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + apiKey;
+        var weatherApi = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + apiKey;
         fetch(weatherApi)
         .then(function (response) {
             return response.json();
