@@ -8,6 +8,9 @@ var country = "usa";
 var searchButtonEl = document.getElementById('search');
 var cityEl = document.getElementById('city-input');
 var stateEl = document.getElementById('state-input');
+var searchCardEl = document.getElementById('search-card');
+var cityNameEL = document.getElementById('city-name');
+
 $(function () {
     var stateNames = [
         'AL',
@@ -66,11 +69,29 @@ $(function () {
     });
   });
 
-//create a function on page load to pull values from locat storage and create a button element in html for a saved history search
+  window.addEventListener("load", function(event) {
+    var searchHistory = JSON.parse(localStorage.getItem("history"));
+    console.log(searchHistory);
+    buttonCreate = "button";
+    var si = 0;
+    for (let si = 0; si < searchHistory.length; si++) {
+       var buttonEl = document.createElement(buttonCreate);
+       buttonEl.textContent = searchHistory[si],
+       buttonEl.setAttribute("class", "btn btn-secondary w-100 m-2 p-3 s-3");
+       buttonEl.setAttribute("type", "button");
+       searchCardEl.appendChild(buttonEl);
+        
+    }
+
+});
 
 searchButtonEl.addEventListener("click", function() {
     var city = $("#city-input").val();
     var state = $("#state-input").val();
+        city = city.toLowerCase().replace(/(^|\s)\S/g, function(letter) {
+            return letter.toUpperCase();
+        });
+        state = state.toUpperCase();
     var history = [];
         if (JSON.parse(localStorage.getItem("history")) !== null) {
             history = JSON.parse(localStorage.getItem("history"));
@@ -103,6 +124,7 @@ searchButtonEl.addEventListener("click", function() {
                     console.log(i);
                     var main = listItem.main;
                     var wind = listItem.wind;
+                    var weather = listItem.weather;
                     var elementId = "#tomorrow" + index;
                     console.log(elementId);
                     var dateText =  dayjs(listItem.dt_txt).format('MM/DD/YYYY');
@@ -117,10 +139,13 @@ searchButtonEl.addEventListener("click", function() {
                     var humText = main.humidity;
                         $(elementId + " li:nth-child(4)").text("Humidity: "+humText);
                     console.log(humText);
+                    var icon = weather[0].icon;
+                    console.log(icon);
+                        $(elementId + " img").attr("src", "https://openweathermap.org/img/wn/"+icon+".png");
                     index++;
                 }
                 console.log(data.list)
-                //will need to store the city/state value  in local storage as an array and then use that to populate the list of search history secondary buttons
+                cityNameEL.textContent = city+","+state;
 
             })
 
@@ -133,7 +158,8 @@ searchButtonEl.addEventListener("click", function() {
     console.log(state);
 });
 
-$(".btn-secondary").on("click", function(event) {
+// $(".btn-secondary").on("click", function(event) {
+$(document).on("click", ".btn-secondary", function(event) {
     event.preventDefault();
     var city = $(this).text();
     console.log(city);
@@ -162,6 +188,7 @@ $(".btn-secondary").on("click", function(event) {
                 console.log(i);
                 var main = listItem.main;
                 var wind = listItem.wind;
+                var weather = listItem.weather;
                 var elementId = "#tomorrow" + index;
                 console.log(elementId);
                 var dateText =  dayjs(listItem.dt_txt).format('MM/DD/YYYY');
@@ -176,9 +203,13 @@ $(".btn-secondary").on("click", function(event) {
                 var humText = main.humidity;
                     $(elementId + " li:nth-child(4)").text("Humidity: "+humText);
                 console.log(humText);
+                var icon = weather[0].icon;
+                console.log(icon);
+                    $(elementId + " img").attr("src", "https://openweathermap.org/img/wn/"+icon+".png");
                 index++;
             }
             console.log(data.list)
+            cityNameEL.textContent = city;
         })
     })
     
@@ -188,4 +219,3 @@ $(".btn-secondary").on("click", function(event) {
 console.log(city);
 console.log(state);
 });
-
