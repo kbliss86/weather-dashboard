@@ -1,9 +1,11 @@
+/* format header text  */
 header {
     text-align: center;
     background-color: blue;
     color: white;
 }
 
+/* allign header text center */
 #search-card h1 {
     text-align: center;
 }
