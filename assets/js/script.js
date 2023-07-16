@@ -165,7 +165,7 @@ searchButtonEl.addEventListener("click", function () {
     history.push(city + "," + state);
     localStorage.setItem("history", JSON.stringify(history));
     var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityState + ",usa&limit=1&appid=" + apiKey;
-    runSearch(geoCodeAPI,cityState);
+    runSearch(geoCodeAPI,cityState); // will send cityState variable to Function
 });
 // event listener for  the secondary search history buttons in the search area 
 $(document).on("click", ".btn-secondary", function (event) {
@@ -175,5 +175,5 @@ $(document).on("click", ".btn-secondary", function (event) {
     console.log(city);
     // set the geocode API to pull lat and long 
     var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityState + ",usa&limit=1&appid=" + apiKey;
-    runSearch(geoCodeAPI,cityState);
+    runSearch(geoCodeAPI,cityState); // will send cityState variable to Function
 });
