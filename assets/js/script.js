@@ -71,7 +71,7 @@ $(function () {
         source: stateNames,
     });
 });
-function runSearch(url) {
+function runSearch(url,cityState) {
     // fetch weather information  
     fetch(url)
         .then(function (response) {
@@ -124,7 +124,7 @@ function runSearch(url) {
                         index++;
                     }
                     console.log(data.list)
-                    cityNameEL.textContent = city + "," + state;
+                    cityNameEL.textContent = cityState;
                 })
         })
 }
@@ -153,6 +153,7 @@ searchButtonEl.addEventListener("click", function () {
     //pull in values from the search input boxes
     var city = $("#city-input").val();
     var state = $("#state-input").val();
+    var cityState = city+","+state;
     //capitalize city and state inputs - for display and local storate
     city = city.toLowerCase().replace(/(^|\s)\S/g, function (letter) {
         return letter.toUpperCase();
@@ -163,16 +164,16 @@ searchButtonEl.addEventListener("click", function () {
     //append City and State to history array and store in local storage
     history.push(city + "," + state);
     localStorage.setItem("history", JSON.stringify(history));
-    var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + state + ",usa&limit=1&appid=" + apiKey;
-    runSearch(geoCodeAPI);
+    var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityState + ",usa&limit=1&appid=" + apiKey;
+    runSearch(geoCodeAPI,cityState);
 });
 // event listener for  the secondary search history buttons in the search area 
 $(document).on("click", ".btn-secondary", function (event) {
     event.preventDefault();
     //captures the name of each card to use in geocode api
-    var city = $(this).text();
+    var cityState = $(this).text();
     console.log(city);
     // set the geocode API to pull lat and long 
-    var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",usa&limit=1&appid=" + apiKey;
-    runSearch(geoCodeAPI);
+    var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityState + ",usa&limit=1&appid=" + apiKey;
+    runSearch(geoCodeAPI,cityState);
 });
