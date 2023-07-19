@@ -212,5 +212,5 @@ $(document).on("click", ".btn-secondary", function (event) {
     var cityState = $(this).text();
     // set the geocode API to pull lat and long 
     var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityState + ",usa&limit=1&appid=" + apiKey;
-    runSearch(geoCodeAPI,cityState);
+    runSearch(geoCodeAPI,cityState); // will send cityState variable to Function
 });
