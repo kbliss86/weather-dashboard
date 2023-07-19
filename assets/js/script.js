@@ -1,5 +1,5 @@
 // api key variable
-console.log(document);
+// console.log(document);
 var apiKey = "1f6f694ad415ec6809cb1502b2268a83";
 
 // city and state variables 
@@ -80,8 +80,8 @@ function runSearch(url,cityState) {
         .then(function (data) {
             console.log(data);
             const { lat, lon } = data[0];
-            console.log(lat);
-            console.log(lon);
+            // console.log(lat);
+            // console.log(lon);
             //return lat and long variables for use in the weather API
             var weatherApi = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + apiKey;
             // fetch weather data 
@@ -93,37 +93,77 @@ function runSearch(url,cityState) {
                     console.log(data);
                     //set and declare weather data variables
                     var list = data.list;
-                    var index = 0;
-                    // for loop for iterating through the weather data array - increase iteration by 7 for each pass through to get the next days weather
-                    for (var i = 0; i < list.length; i += 7) {
+                    var index = 1;
+                    //set date and variables for "todays" weather
+                    var today = dayjs().format('MM/DD/YYYY');
+                    console.log(today);
+                    var listItem0 = list[0];
+                    // console.log(i);
+                    // set and declare weather data variables 
+                    var main0 = listItem0.main;
+                    var wind0 = listItem0.wind;
+                    var weather0 = listItem0.weather;
+                        var dateText0 = today;
+                        $("#tomorrow0" + " li:first-child").text("Date: " + dateText0);
+                        // console.log(dateText);
+                        var tempText = main0.temp;
+                        $("#tomorrow0" + " li:nth-child(2)").text("Temp: " + tempText);
+                        // console.log(tempText);
+                        var windText = wind0.speed;
+                        $("#tomorrow0" + " li:nth-child(3)").text("Wind: " + windText);
+                        // console.log(windText);
+                        var humText = main0.humidity;
+                        $("#tomorrow0" + " li:nth-child(4)").text("Humidity: " + humText);
+                        // console.log(humText);
+                        var icon = weather0[0].icon;
+                        // console.log(icon);
+                        $("#tomorrow0" + " img").attr("src", "https://openweathermap.org/img/wn/" + icon + ".png");
+                        $("#tomorrow0" + " img").removeAttr("hidden");
+
+                    // for loop for iterating through the 5 day weather data array - increase iteration by 7 for each pass through to get the next days weather
+                    for (var i = 1; i < list.length; i++) {
+                        var listItem = list[i];
                         // set and declare weather data variables 
-                        var listItem = list[i]
-                        console.log(i);
                         var main = listItem.main;
                         var wind = listItem.wind;
                         var weather = listItem.weather;
+                        var dateText = dayjs(listItem.dt_txt).format('MM/DD/YYYY');
+                        var dateTime = dayjs(listItem.dt_txt).format('HH');
+                        console.log(dateTime);
+                        var dateTimeMinusThree = dayjs(listItem0.dt_txt).subtract(3, 'hour').format('HH');
+                        console.log(dateTimeMinusThree);
+                        var tomorrow = dayjs(today).add(1, 'day').format('MM/DD/YYYY');
+                        console.log(tomorrow);
+                        var todayPlusFive = dayjs(today).add(6, 'day').format('MM/DD/YYYY');
+                        console.log(todayPlusFive);
+                        if (dateText >= tomorrow && dateText < todayPlusFive && dateTime == dateTimeMinusThree) {
+                       
+                        // console.log(i);
+
                         // create dom elements and assign weather data 
                         var elementId = "#tomorrow" + index;
-                        console.log(searchCardEl.children)
-                        console.log(elementId);
+                        // console.log(searchCardEl.children)
+                        // console.log(elementId);
                         var dateText = dayjs(listItem.dt_txt).format('MM/DD/YYYY');
                         $(elementId + " li:first-child").text("Date: " + dateText);
-                        console.log(dateText);
+                        // console.log(dateText);
                         var tempText = main.temp;
                         $(elementId + " li:nth-child(2)").text("Temp: " + tempText);
-                        console.log(tempText);
+                        // console.log(tempText);
                         var windText = wind.speed;
                         $(elementId + " li:nth-child(3)").text("Wind: " + windText);
-                        console.log(windText);
+                        // console.log(windText);
                         var humText = main.humidity;
                         $(elementId + " li:nth-child(4)").text("Humidity: " + humText);
-                        console.log(humText);
+                        // console.log(humText);
                         var icon = weather[0].icon;
-                        console.log(icon);
+                        // console.log(icon);
                         $(elementId + " img").attr("src", "https://openweathermap.org/img/wn/" + icon + ".png");
+                        $(elementId + " img").removeAttr("hidden");
                         index++;
+                        }
                     }
-                    console.log(data.list)
+                    // console.log(data.list)
                     cityNameEL.textContent = cityState;
                 })
         })
@@ -133,7 +173,7 @@ function runSearch(url,cityState) {
 window.addEventListener("load", function (event) {
     // pull search history from local storage 
     var searchHistory = JSON.parse(localStorage.getItem("history")) || [];
-    console.log(searchHistory);
+    // console.log(searchHistory);
     //button creation variable
     buttonCreate = "button";
     var si = 0;
@@ -146,6 +186,7 @@ window.addEventListener("load", function (event) {
         searchCardEl.appendChild(buttonEl);
     
     }
+
 });
 
 // event listener for the city and state search input boxes 
@@ -154,6 +195,7 @@ searchButtonEl.addEventListener("click", function () {
     var city = $("#city-input").val();
     var state = $("#state-input").val();
     var cityState = city+","+state;
+    var searchHistory = [];
     //capitalize city and state inputs - for display and local storate
     city = city.toLowerCase().replace(/(^|\s)\S/g, function (letter) {
         return letter.toUpperCase();
@@ -166,13 +208,25 @@ searchButtonEl.addEventListener("click", function () {
     localStorage.setItem("history", JSON.stringify(history));
     var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityState + ",usa&limit=1&appid=" + apiKey;
     runSearch(geoCodeAPI,cityState);
+    searchHistory = JSON.parse(localStorage.getItem("history")) || [];
+    buttonCreate = "button";
+    var si = 0;
+    // for loop for iterating through the array variables in session storage and creating the buttons in the search area
+    for (let si = 0; si < searchHistory.length; si++) {
+        var buttonEl = document.createElement(buttonCreate);
+        buttonEl.textContent = searchHistory[si],
+            buttonEl.setAttribute("class", "btn btn-secondary w-100 m-2 p-3 s-3");
+        buttonEl.setAttribute("type", "button");
+        searchCardEl.appendChild(buttonEl);
+    
+    }
 });
 // event listener for  the secondary search history buttons in the search area 
 $(document).on("click", ".btn-secondary", function (event) {
     event.preventDefault();
     //captures the name of each card to use in geocode api
     var cityState = $(this).text();
-    console.log(city);
+    // console.log(city);
     // set the geocode API to pull lat and long 
     var geoCodeAPI = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityState + ",usa&limit=1&appid=" + apiKey;
     runSearch(geoCodeAPI,cityState);
