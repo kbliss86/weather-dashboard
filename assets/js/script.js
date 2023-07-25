@@ -121,9 +121,14 @@ function runSearch(url,cityState) {
                         var dateText = dayjs(listItem.dt_txt).format('MM/DD/YYYY');
                         var dateTime = dayjs(listItem.dt_txt).format('HH');
                         var dateTimeMinusThree = dayjs(listItem0.dt_txt).subtract(3, 'hour').format('HH');
+                            // if(dateTimeMinusThree < 0) {
+                            //     dateTimeMinusThree = 21
+                            // } else {
+                            //     dateTimeMinusThree = dayjs(listItem0.dt_txt).subtract(3, 'hour').format('HH');
+                            // }
                         var tomorrow = dayjs(today).add(1, 'day').format('MM/DD/YYYY');
                         var todayPlusFive = dayjs(today).add(6, 'day').format('MM/DD/YYYY');
-                        if (dateText >= tomorrow && dateText < todayPlusFive && dateTime == dateTimeMinusThree) {
+                        if (dateText >= tomorrow && dateText < todayPlusFive && dateTime == 12) {
 
                         // create dom elements and assign weather data 
                         var elementId = "#tomorrow" + index;
